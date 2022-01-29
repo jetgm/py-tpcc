@@ -46,8 +46,8 @@ logging.basicConfig(level = logging.INFO,
                     format="%(asctime)s [%(funcName)s:%(lineno)03d] %(levelname)-5s: %(message)s",
                     datefmt="%m-%d-%Y %H:%M:%S",
                     filename = 'tpcc.log',
-                    filemode='a',
-                    stream = sys.stdout)
+                    filemode='a')
+                    # stream = sys.stdout)
                     
 ## ==============================================
 ## createDriverClass
@@ -189,7 +189,7 @@ if __name__ == '__main__':
                          help='Number of Warehouses')
     aparser.add_argument('--duration', default=60, type=int, metavar='D',
                          help='How long to run the benchmark in seconds')
-    aparser.add_argument('--ddl', default=os.path.realpath(os.path.join(os.path.dirname(__file__), "tpcc.sql")),
+    aparser.add_argument('--ddl', default=os.path.realpath(os.path.join(os.path.dirname(__file__), "tpcc_ck.sql")),
                          help='Path to the TPC-C DDL SQL file')
     aparser.add_argument('--clients', default=1, type=int, metavar='N',
                          help='The number of blocking clients to fork')
