@@ -85,7 +85,7 @@ TXN_QUERIES = {
             WHERE OL_W_ID = %(OL_W_ID)s
               AND OL_D_ID = %(OL_D_ID)s
               AND OL_O_ID < %(OL_O_ID)s
-              AND OL_O_ID >= %(OL_O_ID)s
+              AND OL_O_ID >= %(O_ID_S)s
               AND S_W_ID = %(S_W_ID)s
               AND S_I_ID = OL_I_ID
               AND S_QUANTITY < %(S_QUANTITY)s
@@ -476,8 +476,9 @@ class SnowballDriver(AbstractDriver):
         result = self.cursor.fetchone()
         assert result
         o_id = result[0]
+        o_id_s = o_id - 20
 
-        self.cursor.execute(q["getStockCount"], {'OL_W_ID': w_id, 'OL_D_ID': d_id, 'OL_O_ID': o_id, 'OL_O_ID': (o_id - 20), 'S_W_ID': w_id, 'S_QUANTITY': threshold})
+        self.cursor.execute(q["getStockCount"], {'OL_W_ID': w_id, 'OL_D_ID': d_id, 'OL_O_ID': o_id, 'O_ID_S': (o_id_s), 'S_W_ID': w_id, 'S_QUANTITY': threshold})
         result = self.cursor.fetchone()
 
         self.conn.commit()
