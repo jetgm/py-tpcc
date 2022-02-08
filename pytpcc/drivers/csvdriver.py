@@ -29,7 +29,7 @@ import csv
 from datetime import datetime
 from pprint import pprint,pformat
 
-from abstractdriver import *
+from .abstractdriver import *
 
 ## ==============================================
 ## CSVDriver
@@ -39,7 +39,7 @@ class CsvDriver(AbstractDriver):
         "table_directory": ("The path to the directory to store the table CSV files", "/tmp/tpcc-tables" ),
         "txn_directory": ("The path to the directory to store the txn CSV files", "/tmp/tpcc-txns" ),
     }
-    
+
     def __init__(self, ddl):
         super(CsvDriver, self).__init__("csv", ddl)
         self.table_directory = None
@@ -48,42 +48,40 @@ class CsvDriver(AbstractDriver):
         self.txn_outputs = { }
         self.txn_params = { }
     ## DEF
-    
+
     def makeDefaultConfig(self):
         return CsvDriver.DEFAULT_CONFIG
     ## DEF
-    
+
     def loadConfig(self, config):
         for key in CsvDriver.DEFAULT_CONFIG.keys():
             assert key in config, "Missing parameter '%s' in %s configuration" % (key, self.name)
-        
+
         self.table_directory = config["table_directory"]
         assert self.table_directory
         if not os.path.exists(self.table_directory): os.makedirs(self.table_directory)
-        
+
         self.txn_directory = config["txn_directory"]
         assert self.txn_directory
         if not os.path.exists(self.txn_directory): os.makedirs(self.txn_directory)
     ## DEF
-    
+
     def loadTuples(self, tableName, tuples):
         if not tableName in self.table_outputs:
             path = os.path.join(self.table_directory, "%s.csv" % tableName)
-            self.table_outputs[tableName] = csv.writer(open(path, 'wb'), quoting=csv.QUOTE_ALL)
+            self.table_outputs[tableName] = csv.writer(open(path, 'w'), quoting=csv.QUOTE_ALL)
         ## IF
         self.table_outputs[tableName].writerows(tuples)
     ## DEF
-    
+
     def executeTransaction(self, txn, params):
         if not txn in self.txn_outputs:
             path = os.path.join(self.txn_directory, "%s.csv" % txn)
-            self.txn_outputs[txn] = csv.writer(open(path, 'wb'), quoting=csv.QUOTE_ALL)
-            self.txn_params[txn] = params.keys()[:]
-            self.txn_outputs[txn].writerow(["Timestamp"] + self.txn_params[txn])
+            self.txn_outputs[txn] = csv.writer(open(path, 'w'), quoting=csv.QUOTE_ALL)
+            self.txn_params[txn] = params.keys()
+            self.txn_outputs[txn].writerow(["Timestamp"] + list(self.txn_params[txn]))
         ## IF
         row = [datetime.now()] + [params[k] for k in self.txn_params[txn]]
         self.txn_outputs[txn].writerow(row)
     ## DEF
 ## CLASS
-
-        

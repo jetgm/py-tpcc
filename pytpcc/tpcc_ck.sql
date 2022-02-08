@@ -1,8 +1,7 @@
-drop database if exists tpcc;
-create database tpcc;
+create database if not exists tpcc;
 use tpcc;
 
-CREATE TABLE WAREHOUSE (
+CREATE TABLE if not exists WAREHOUSE (
   W_ID Int16 DEFAULT 0,
   W_NAME Nullable(String),
   W_STREET_1 Nullable(String),
@@ -17,7 +16,7 @@ CREATE TABLE WAREHOUSE (
   ORDER BY(W_ID)
 ;
 
-CREATE TABLE DISTRICT
+CREATE TABLE if not exists  DISTRICT
 (
     D_ID        Int8  DEFAULT 0,
     D_W_ID      Int16 DEFAULT 0,
@@ -35,7 +34,7 @@ CREATE TABLE DISTRICT
   ORDER BY(D_W_ID,D_ID)
 ;
 
-CREATE TABLE ITEM (
+CREATE TABLE if not exists ITEM (
   I_ID Int32 DEFAULT 0,
   I_IM_ID Nullable(Int32) DEFAULT NULL,
   I_NAME Nullable(String) DEFAULT NULL,
@@ -46,7 +45,7 @@ CREATE TABLE ITEM (
     ORDER BY(I_ID)
 ;
 
-CREATE TABLE CUSTOMER
+CREATE TABLE if not exists CUSTOMER
 (
     C_ID           Int32    DEFAULT 0,
     C_D_ID         Int8     DEFAULT 0,
@@ -75,7 +74,7 @@ CREATE TABLE CUSTOMER
 ;
 
 
-CREATE TABLE HISTORY (
+CREATE TABLE if not exists HISTORY (
   H_C_ID Int32 default 0,
   H_C_D_ID Nullable(Int8),
   H_C_W_ID Nullable(Int16),
@@ -91,7 +90,7 @@ CREATE TABLE HISTORY (
 ;
 
 
-CREATE TABLE STOCK (
+CREATE TABLE if not exists STOCK (
   S_I_ID Int32 DEFAULT 0,
   S_W_ID Int16 DEFAULT 0,
   S_QUANTITY Int32 DEFAULT 0,
@@ -114,7 +113,7 @@ CREATE TABLE STOCK (
   ORDER BY(S_W_ID,S_I_ID)
 ;
 
-CREATE TABLE ORDERS (
+CREATE TABLE if not exists ORDERS (
   O_ID Int32 DEFAULT 0,
   O_C_ID Nullable(Int32),
   O_D_ID Int8 DEFAULT 0,
@@ -129,7 +128,7 @@ CREATE TABLE ORDERS (
 partition by toYYYYMM(O_ENTRY_D)
 ;
 
-CREATE TABLE NEW_ORDER (
+CREATE TABLE if not exists NEW_ORDER (
   NO_O_ID Int32 DEFAULT 0,
   NO_D_ID Int8 DEFAULT 0,
   NO_W_ID Int16 DEFAULT 0
@@ -138,7 +137,7 @@ CREATE TABLE NEW_ORDER (
   ORDER BY(NO_O_ID)
 ;
 
-CREATE TABLE ORDER_LINE (
+CREATE TABLE if not exists ORDER_LINE (
   OL_O_ID Int32 DEFAULT 0,
   OL_D_ID Int8 DEFAULT 0,
   OL_W_ID Int16 DEFAULT 0,

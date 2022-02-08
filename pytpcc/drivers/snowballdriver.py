@@ -6,13 +6,12 @@
 from __future__ import with_statement
 
 import os
-from clickhouse_driver import Client, connect
+from snowball_driver import Client, connect
 import logging
-import commands
 from pprint import pprint, pformat
 
 import constants
-from abstractdriver import *
+from .abstractdriver import *
 
 TXN_QUERIES = {
     "DELIVERY": {
@@ -143,8 +142,8 @@ class SnowballDriver(AbstractDriver):
             logging.debug("Loading DDL file '%s'" % (self.ddl))
             ## HACK
             cmd = "snowball-client -mn  < %s" % (self.ddl)
-            (result, output) = commands.getstatusoutput(cmd)
-            assert result == 0, cmd + "\n" + output
+            result = os.system(cmd)
+            assert result == 0
         ## IF
 
         self.conn = connect(
@@ -375,7 +374,7 @@ class SnowballDriver(AbstractDriver):
             all_customers = self.cursor.fetchall()
             assert len(all_customers) > 0
             namecnt = len(all_customers)
-            index = (namecnt - 1) / 2
+            index = (namecnt - 1) // 2
             customer = all_customers[index]
             c_id = customer[0]
         assert len(customer) > 0
@@ -416,7 +415,7 @@ class SnowballDriver(AbstractDriver):
             all_customers = self.cursor.fetchall()
             assert len(all_customers) > 0
             namecnt = len(all_customers)
-            index = (namecnt - 1) / 2
+            index = (namecnt - 1) // 2
             customer = all_customers[index]
             c_id = customer[0]
         assert len(customer) > 0

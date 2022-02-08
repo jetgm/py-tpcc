@@ -30,7 +30,8 @@
 # -----------------------------------------------------------------------
 
 import random
-import nurand
+
+from . import nurand
 
 SYLLABLES = [ "BAR", "OUGHT", "ABLE", "PRI", "PRES", "ESE", "ANTI", "CALLY", "ATION", "EING" ]
 
@@ -45,8 +46,8 @@ def NURand(a, x, y):
     global nurandVar
     assert x <= y
     if nurandVar is None:
-		setNURand(nurand.makeForLoad())
-    
+      setNURand(nurand.makeForLoad())
+
     if a == 255:
         c = nurandVar.cLast
     elif a == 1023:
@@ -55,7 +56,7 @@ def NURand(a, x, y):
         c = nurandVar.orderLineItemId
     else:
         raise Exception("a = " + a + " is not a supported value")
-    
+
     return (((number(0, a) | number(x, y)) + c) % (y - x + 1)) + x
 ## DEF
 
@@ -77,7 +78,7 @@ def numberExcluding(minimum, maximum, excluding):
     if num >= excluding: num += 1
     assert minimum <= num and num <= maximum and num != excluding
     return num
-## DEF 
+## DEF
 
 def fixedPoint(decimal_places, minimum, maximum):
     assert decimal_places > 0
@@ -95,7 +96,7 @@ def fixedPoint(decimal_places, minimum, maximum):
 
 def selectUniqueIds(numUnique, minimum, maximum):
     rows = set()
-    for i in range(0, numUnique):
+    for i in range(0, int(numUnique)):
         index = None
         while index == None or index in rows:
             index = number(minimum, maximum)
@@ -129,8 +130,8 @@ def makeLastName(number):
     """A last name as defined by TPC-C 4.3.2.3. Not actually random."""
     global SYLLABLES
     assert 0 <= number and number <= 999
-    indicies = [ number/100, (number/10)%10, number%10 ]
-    return "".join(map(lambda x: SYLLABLES[x], indicies))
+    indicies = [ int(number/100), int(number/10)%10, int(number%10) ]
+    return "".join(map(lambda x: SYLLABLES[int(x)], indicies))
 ## DEF
 
 def makeRandomLastName(maxCID):
