@@ -92,7 +92,7 @@ class Results:
     def __str__(self):
         return self.show()
 
-    def show(self, load_time = None):
+    def show(self, load_time = None, clients=1):
         if self.start == None:
             return "Benchmark not started"
         if self.stop == None:
@@ -123,7 +123,7 @@ class Results:
             total_time += txn_time
             total_cnt += txn_cnt
         ret += "\n" + ("-"*total_width)
-        total_rate = "%.02f txn/s" % ((total_cnt / total_time))
+        total_rate = "%.02f txn/s" % ((total_cnt / total_time)*clients)
         ret += f % ("TOTAL", str(total_cnt), str("%.2f" % (total_time * 1000000)), total_rate)
 
         return ret

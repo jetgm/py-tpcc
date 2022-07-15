@@ -42,11 +42,7 @@ from util import *
 from runtime import *
 import drivers
 
-logging.basicConfig(level = logging.INFO,
-                    format="%(asctime)s [%(funcName)s:%(lineno)03d] %(levelname)-5s: %(message)s",
-                    datefmt="%m-%d-%Y %H:%M:%S",
-                    filename='tpcc.log',
-                    filemode='a')
+
 
 ## ==============================================
 ## createDriverClass
@@ -203,10 +199,16 @@ if __name__ == '__main__':
                          help='Print out the default configuration file for the system and exit')
     aparser.add_argument('--debug', action='store_true',
                          help='Enable debug log messages')
+    aparser.add_argument('--log', default=os.path.realpath(os.path.join(os.path.dirname(__file__), "tpcc.log")),
+                         help='Path to the log file')
     args = vars(aparser.parse_args())
 
     if args['debug']: logging.getLogger().setLevel(logging.DEBUG)
-
+    logging.basicConfig(level=logging.INFO,
+                        format="%(asctime)s [%(funcName)s:%(lineno)03d] %(levelname)-5s: %(message)s",
+                        datefmt="%m-%d-%Y %H:%M:%S",
+                        filename=args['log'],
+                        filemode='a')
     ## Create a handle to the target client driver
     driverClass = createDriverClass(args['system'])
     assert driverClass != None, "Failed to find '%s' class" % args['system']
@@ -269,8 +271,8 @@ if __name__ == '__main__':
         else:
             results = startExecution(driverClass, scaleParameters, args, config)
         assert results
-        print(results.show(load_time))
-        logging.info(results.show(load_time))
+        print(results.show(load_time, args['clients']))
+        logging.info(results.show(load_time), args['clients'])
     ## IF
 
 ## MAIN

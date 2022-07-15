@@ -92,17 +92,32 @@ class Executor:
         x = rand.number(1, 100)
         params = None
         txn = None
-        if x <= 4: ## 4%
-            txn, params = (constants.TransactionTypes.STOCK_LEVEL, self.generateStockLevelParams())
-        elif x <= 4 + 4: ## 4%
-            txn, params = (constants.TransactionTypes.DELIVERY, self.generateDeliveryParams())
-        elif x <= 4 + 4 + 4: ## 4%
-            txn, params = (constants.TransactionTypes.ORDER_STATUS, self.generateOrderStatusParams())
-        elif x <= 43 + 4 + 4 + 4: ## 43%
-            txn, params = (constants.TransactionTypes.PAYMENT, self.generatePaymentParams())
-        else: ## 45%
-            assert x > 100 - 45
-            txn, params = (constants.TransactionTypes.NEW_ORDER, self.generateNewOrderParams())
+
+        ##tpcc
+        # if x <= 4: ## 4%
+        #     txn, params = (constants.TransactionTypes.STOCK_LEVEL, self.generateStockLevelParams())
+        # elif x <= 4 + 4: ## 4%
+        #     txn, params = (constants.TransactionTypes.DELIVERY, self.generateDeliveryParams())
+        # elif x <= 4 + 4 + 4: ## 4%
+        #     txn, params = (constants.TransactionTypes.ORDER_STATUS, self.generateOrderStatusParams())
+        # elif x <= 43 + 4 + 4 + 4: ## 43%
+        #     txn, params = (constants.TransactionTypes.PAYMENT, self.generatePaymentParams())
+        # else: ## 45%
+        #     assert x > 100 - 45
+        #     txn, params = (constants.TransactionTypes.NEW_ORDER, self.generateNewOrderParams())
+
+        ##snowball testing: select=80%, dml=20%
+        if x <= 10:
+            txn, params = (constants.TransactionTypes.STOCK_LEVEL, self.generateNewOrderParams())
+        elif x <= 10 + 3:
+            txn, params = (constants.TransactionTypes.DELIVERY, self.generatePaymentParams())
+        elif x <= 10 + 3 + 4:
+            txn, params = (constants.TransactionTypes.ORDER_STATUS, self.generateDeliveryParams())
+        elif x <= 10 + 3 + 4 + 42:
+            txn, params = (constants.TransactionTypes.PAYMENT, self.generateOrderStatusParams())
+        else:
+            # 41
+            txn, params = (constants.TransactionTypes.NEW_ORDER, self.generateStockLevelParams())
 
         return (txn, params)
     ## DEF
